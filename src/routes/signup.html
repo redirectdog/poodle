@@ -4,16 +4,29 @@
 
 <h1>Signup</h1>
 <form on:submit|preventDefault="submit()">
-	<input type="text" bind:value=email />
+	<div>
+		<input type="text" bind:value=email />
+	</div>
+	<div>
+		<input type="password" bind:value=password />
+	</div>
 	<button type="submit">Signup</button>
 </form>
 
 <script>
 	export default {
-		data: () => ({email: ""}),
+		data: () => ({email: "", password: ""}),
 		methods: {
 			submit() {
-				console.log(this);
+				const { email, password } = this.get();
+				fetch(
+					"/api/users",
+					{
+						method: "POST",
+						body: JSON.stringify({email, password}),
+						headers: {"Content-Type": "application/json"},
+					}
+				);
 			}
 		},
 	}
