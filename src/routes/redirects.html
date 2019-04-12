@@ -1,0 +1,23 @@
+<svelte:head>
+	<title>My Redirects</title>
+</svelte:head>
+
+<h1>My Redirects</h1>
+<ul>
+	{#each data as redirect}
+	<li>{redirect.host} -&gt; {redirect.destination}</li>
+	{/each}
+</ul>
+
+<script>
+	export default {
+		preload() {
+			return this.fetch("/api/users/~me/redirects", {credentials: "include"})
+				.then(res => res.json())
+				.then(res => {
+					console.log(res);
+					return {data: res};
+				});
+		}
+	}
+</script>
