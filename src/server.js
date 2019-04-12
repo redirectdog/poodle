@@ -2,6 +2,7 @@ import polka from "polka";
 import compression from "compression";
 import http from "http";
 import httpProxy from "http-proxy";
+import isomorphicCookie from "isomorphic-cookie";
 import * as sapper from "../__sapper__/server.js";
 
 const PORT = process.env.PORT || 3000;
@@ -14,6 +15,12 @@ const clientServer = polka()
 	);
 
 const apiServer = httpProxy.createProxyServer({});
+apiServer.on("proxyReq", function(proxyReq, req, res, options) {
+	const token = isomorphicCookie.load("poodleToken", req);
+	if(token) {
+		proxyReq.setHeader("Authorization", "Bearer " + token);
+	}
+});
 
 http.createServer(function(req, res) {
 	if(req.url.startsWith("/api")) {

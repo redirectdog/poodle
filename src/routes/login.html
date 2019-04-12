@@ -1,0 +1,38 @@
+<svelte:head>
+	<title>Login</title>
+</svelte:head>
+
+<h1>Login</h1>
+<form on:submit|preventDefault="submit()">
+	<div>
+		<input type="text" bind:value=email />
+	</div>
+	<div>
+		<input type="password" bind:value=password />
+	</div>
+	<button type="submit">Login</button>
+</form>
+
+<script>
+	export default {
+		data: () => ({email: "", password: ""}),
+		methods: {
+			submit() {
+				const { email, password } = this.get();
+				fetch(
+					"/api/logins",
+					{
+						method: "POST",
+						body: JSON.stringify({email, password}),
+						headers: {"Content-Type": "application/json"},
+					},
+				)
+					.then(res => res.text())
+					.then(res => {
+						console.log("result is", res);
+						document.cookie = "poodleToken=" + res + ";path=/";
+					});
+			}
+		}
+	}
+</script>
