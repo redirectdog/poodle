@@ -3,6 +3,7 @@
 </svelte:head>
 
 <h1>My Redirects</h1>
+<button on:click="newRedirect()">New</button>
 <ul>
 	{#each data as redirect}
 	<li>{redirect.host} -&gt; {redirect.destination}</li>
@@ -18,6 +19,29 @@
 					console.log(res);
 					return {data: res};
 				});
+		},
+		methods: {
+			newRedirect() {
+				const host = prompt("Host?");
+				const destination = prompt("Destination");
+
+				fetch(
+					"/api/users/~me/redirects",
+					{
+						method: "POST",
+						body: JSON.stringify({host, destination}),
+					}
+				)
+					.then(res => res.text())
+					.then(idStr => parseInt(idStr, 10))
+					.then(id => {
+						const { data } = this.get();
+
+						data.push({id, host, destination});
+
+						this.set({data});
+					});
+			}
 		}
 	}
 </script>
