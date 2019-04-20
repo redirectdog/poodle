@@ -6,7 +6,7 @@ import isomorphicCookie from "isomorphic-cookie";
 import * as sapper from "../__sapper__/server.js";
 
 const PORT = process.env.PORT || 3000;
-const PROD = process.env.NODE_ENV === "production";
+const DALMATIAN_HOST = process.env.DALMATIAN_HOST || "http://localhost:5000";
 
 const clientServer = polka()
 	.use(
@@ -25,7 +25,7 @@ apiServer.on("proxyReq", function(proxyReq, req, res, options) {
 http.createServer(function(req, res) {
 	if(req.url.startsWith("/api")) {
 		req.url = req.url.substring(4);
-		apiServer.web(req, res, {target: "http://localhost:5000"}, function(e) {
+		apiServer.web(req, res, {target: DALMATIAN_HOST}, function(e) {
 			console.error(e);
 			try {
 				res.writeHead(500);
