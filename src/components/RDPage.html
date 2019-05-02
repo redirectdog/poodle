@@ -1,0 +1,11 @@
+<div>
+	<header>
+		<h1>RedirectDog</h1>
+		{#if $USER}
+			<div>Logged in as {$USER.id}</div>
+		{:else}
+			<div><a href="/login">Login</a></div>
+		{/if}
+	</header>
+	<slot />
+</div>

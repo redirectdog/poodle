@@ -19,6 +19,7 @@
 		"compression": "^1.7.4",
 		"http-proxy": "^1.17.0",
 		"isomorphic-cookie": "^1.2.4",
+		"node-fetch": "^2.5.0",
 		"polka": "^1.0.0-next.1"
 	}
 }
