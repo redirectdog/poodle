@@ -4,27 +4,45 @@
 
 <RDPage>
 	<h2>Login</h2>
-	<form on:submit|preventDefault="submit()">
+	{#if success}
 		<div>
-			<input type="text" bind:value=email />
+			<p>
+				Successfully logged in.
+			</p>
+			<p>
+				<a href="/redirects">My Redirects</a>
+			</p>
 		</div>
-		<div>
-			<input type="password" bind:value=password />
-		</div>
-		<button type="submit">Login</button>
-	</form>
+	{:else}
+		{#if !submitting && error !== null}
+		<p>Login failed: {error + ""}</p>
+		{/if}
+		<form on:submit|preventDefault="submit()">
+			<div>
+				<input type="text" bind:value=email />
+			</div>
+			<div>
+				<input type="password" bind:value=password />
+			</div>
+			<button type="submit" disabled={submitting}>
+				{#if submitting}Logging in...{:else}Login{/if}
+			</button>
+		</form>
+	{/if}
 </RDPage>
 
 <script>
+	import fetchWithError from "../util/fetchWithError";
 	export default {
 		components: {
 			RDPage: "../components/RDPage.html",
 		},
-		data: () => ({email: "", password: ""}),
+		data: () => ({email: "", password: "", success: false, submitting: false, error: null}),
 		methods: {
 			submit() {
 				const { email, password } = this.get();
-				fetch(
+				this.set({submitting: true});
+				fetchWithError(
 					"/api/logins",
 					{
 						method: "POST",
@@ -36,10 +54,17 @@
 					.then(res => {
 						console.log("result is", res);
 						document.cookie = "poodleToken=" + res + ";path=/";
+						this.set({success: true});
 						fetch("/api/users/~me")
 							.then(res => res.json())
 							.then(res => this.store.set({USER: res}));
-					});
+					})
+					.catch(err => {
+						console.error(err);
+						console.log("??");
+						this.set({error: err});
+					})
+					.then(() => this.set({submitting: false}));
 			}
 		}
 	}
