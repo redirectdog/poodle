@@ -6,7 +6,13 @@
 <button on:click="newRedirect()">New</button>
 <ul>
 	{#each data as redirect}
-	<li>{redirect.host} -&gt; {redirect.destination}</li>
+	<li>
+		{redirect.host} -&gt; {redirect.destination}
+		<ul>
+			<li>{redirect.visits_total} total visits</li>
+			<li>{redirect.visits_month} visits in the last month</li>
+		</ul>
+	</li>
 	{/each}
 </ul>
 
@@ -16,7 +22,6 @@
 			return this.fetch("/api/users/~me/redirects", {credentials: "include"})
 				.then(res => res.json())
 				.then(res => {
-					console.log(res);
 					return {data: res};
 				});
 		},
