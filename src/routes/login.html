@@ -19,10 +19,10 @@
 		{/if}
 		<form on:submit|preventDefault="submit()">
 			<div>
-				<input type="text" bind:value=email />
+				<input name="username" type="text" bind:value=email />
 			</div>
 			<div>
-				<input type="password" bind:value=password />
+				<input name="password" type="password" bind:value=password />
 			</div>
 			<button type="submit" disabled={submitting}>
 				{#if submitting}Logging in...{:else}Login{/if}
