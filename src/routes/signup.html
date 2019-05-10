@@ -3,29 +3,33 @@
 </svelte:head>
 
 <RDPage>
-	<h2>Signup</h2>
-	{#if success}
-		<div>
-			Successfully signed up! You can now <a href="/login">Log in</a>
-		</div>
-	{:else}
-		{#if !submitting && error !== null}
-			<p>
-				Failed to sign up: {error + ""}
-			</p>
+	<SmallBox>
+		<h2 class="box-header">Signup</h2>
+		{#if success}
+			<div>
+				Successfully signed up! You can now <a href="/login">Log in</a>
+			</div>
+		{:else}
+			{#if !submitting && error !== null}
+				<Alert>
+					Failed to sign up: {error + ""}
+				</Alert>
+			{/if}
+			<form on:submit|preventDefault="submit()">
+				<div>
+					<input type="text" bind:value=email placeholder="Email Address" />
+				</div>
+				<div>
+					<input type="password" bind:value=password placeholder="Password" />
+				</div>
+				<ButtonFooter>
+					<button type="submit" disabled={submitting}>
+						{#if submitting}Creating Account...{:else}Create Account{/if}
+					</button>
+				</ButtonFooter>
+			</form>
 		{/if}
-		<form on:submit|preventDefault="submit()">
-			<div>
-				<input type="text" bind:value=email />
-			</div>
-			<div>
-				<input type="password" bind:value=password />
-			</div>
-			<button type="submit" disabled={submitting}>
-				{#if submitting}Creating Account...{:else}Create Account{/if}
-			</button>
-		</form>
-	{/if}
+	</SmallBox>
 </RDPage>
 
 <script>
@@ -33,7 +37,10 @@
 
 	export default {
 		components: {
+			Alert: "../components/Alert.html",
+			ButtonFooter: "../components/ButtonFooter.html",
 			RDPage: "../components/RDPage.html",
+			SmallBox: "../components/SmallBox.html",
 		},
 		data: () => ({email: "", password: "", submitting: false, error: null, success: false}),
 		methods: {
