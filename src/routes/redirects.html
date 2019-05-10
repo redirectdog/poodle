@@ -4,17 +4,22 @@
 
 <h1>My Redirects</h1>
 <button on:click="newRedirect()">New</button>
-<ul>
+<table>
+	<tr>
+		<th>Redirect</th>
+		<th>Total Visits</th>
+		<th>Visits in the Last Month</th>
+	</tr>
 	{#each data as redirect}
-	<li>
-		{redirect.host} -&gt; {redirect.destination}
-		<ul>
-			<li>{redirect.visits_total} total visits</li>
-			<li>{redirect.visits_month} visits in the last month</li>
-		</ul>
-	</li>
+	<tr>
+		<td>
+			{redirect.host} -&gt; {redirect.destination}
+		</td>
+		<td>{redirect.visits_total}</td>
+		<td>{redirect.visits_month}</td>
+	</tr>
 	{/each}
-</ul>
+</table>
 
 <script>
 	export default {
