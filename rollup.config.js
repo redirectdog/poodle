@@ -2,14 +2,19 @@ import babel from "rollup-plugin-babel";
 import commonjs from "rollup-plugin-commonjs";
 import replace from "rollup-plugin-replace";
 import resolve from "rollup-plugin-node-resolve";
+import sass from "rollup-plugin-sass";
 import svelte from "rollup-plugin-svelte";
 import { terser } from "rollup-plugin-terser";
+
+import { sass as preprocessSass } from "svelte-preprocess-sass";
 
 import sapperConfig from "sapper/config/rollup.js";
 
 const mode = process.env.NODE_ENV === "production" ? "production" : "development";
 const dev = mode === "development";
 const legacy = !!process.env.SAPPER_LEGACY_BUILD;
+
+const sveltePreprocessConfig = {style: preprocessSass({}, {name: "scss"})};
 
 export default {
 	client: {
@@ -24,6 +29,7 @@ export default {
 				dev,
 				hydratable: true,
 				emitCss: true,
+				preprocess: sveltePreprocessConfig,
 			}),
 			resolve(),
 			commonjs(),
@@ -44,6 +50,7 @@ export default {
 			}),
 
 			!dev && terser({module: true}),
+			sass({insert: true, include: "**/*.scss", exclude: []}),
 		],
 	},
 
@@ -58,6 +65,7 @@ export default {
 			svelte({
 				generate: "ssr",
 				dev,
+				preprocess: sveltePreprocessConfig,
 			}),
 			resolve(),
 			commonjs(),

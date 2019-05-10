@@ -3,39 +3,46 @@
 </svelte:head>
 
 <RDPage>
-	<h2>Login</h2>
-	{#if success}
-		<div>
-			<p>
-				Successfully logged in.
-			</p>
-			<p>
-				<a href="/redirects">My Redirects</a>
-			</p>
-		</div>
-	{:else}
-		{#if !submitting && error !== null}
-		<p>Login failed: {error + ""}</p>
+	<SmallBox>
+		<h2 class="box-header">Login</h2>
+		{#if success}
+			<div>
+				<p>
+					Successfully logged in.
+				</p>
+				<p>
+					<a href="/redirects">My Redirects</a>
+				</p>
+			</div>
+		{:else}
+			{#if !submitting && error !== null}
+				<Alert>Login failed: {error + ""}</Alert>
+			{/if}
+			<form on:submit|preventDefault="submit()">
+				<div>
+					<input name="username" type="text" bind:value=email placeholder="Email Address" />
+				</div>
+				<div>
+					<input name="password" type="password" bind:value=password placeholder="Password" />
+				</div>
+				<ButtonFooter>
+					<button type="submit" disabled={submitting}>
+						{#if submitting}Logging in...{:else}Login{/if}
+					</button>
+				</ButtonFooter>
+			</form>
 		{/if}
-		<form on:submit|preventDefault="submit()">
-			<div>
-				<input name="username" type="text" bind:value=email />
-			</div>
-			<div>
-				<input name="password" type="password" bind:value=password />
-			</div>
-			<button type="submit" disabled={submitting}>
-				{#if submitting}Logging in...{:else}Login{/if}
-			</button>
-		</form>
-	{/if}
+	</SmallBox>
 </RDPage>
 
 <script>
 	import fetchWithError from "../util/fetchWithError";
 	export default {
 		components: {
+			Alert: "../components/Alert.html",
+			ButtonFooter: "../components/ButtonFooter.html",
 			RDPage: "../components/RDPage.html",
+			SmallBox: "../components/SmallBox.html",
 		},
 		data: () => ({email: "", password: "", success: false, submitting: false, error: null}),
 		methods: {
