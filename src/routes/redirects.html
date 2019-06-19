@@ -22,6 +22,9 @@
 </table>
 
 <script>
+	import fetchWithError from "../util/fetchWithError";
+	import showError from "../util/showError";
+
 	export default {
 		preload() {
 			return this.fetch("/api/users/~me/redirects", {credentials: "include"})
@@ -35,7 +38,7 @@
 				const host = prompt("Host?");
 				const destination = prompt("Destination");
 
-				fetch(
+				fetchWithError(
 					"/api/users/~me/redirects",
 					{
 						method: "POST",
@@ -50,7 +53,8 @@
 						data.push({id, host, destination});
 
 						this.set({data});
-					});
+					})
+					.catch(showError);
 			}
 		}
 	}
