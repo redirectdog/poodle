@@ -25,6 +25,12 @@
 				<div>
 					<input name="password" type="password" bind:value=password placeholder="Password" />
 				</div>
+				<div>
+					<label>
+						<input type="checkbox" bind:value=remember />
+						Remember Me
+					</label>
+				</div>
 				<ButtonFooter>
 					<button type="submit" disabled={submitting}>
 						{#if submitting}Logging in...{:else}Login{/if}
@@ -44,10 +50,10 @@
 			RDPage: "../components/RDPage.html",
 			SmallBox: "../components/SmallBox.html",
 		},
-		data: () => ({email: "", password: "", success: false, submitting: false, error: null}),
+		data: () => ({email: "", password: "", success: false, submitting: false, error: null, remember: false}),
 		methods: {
 			submit() {
-				const { email, password } = this.get();
+				const { email, password, remember } = this.get();
 				this.set({submitting: true});
 				fetchWithError(
 					"/api/logins",
@@ -60,7 +66,7 @@
 					.then(res => res.text())
 					.then(res => {
 						console.log("result is", res);
-						document.cookie = "poodleToken=" + res + ";path=/";
+						document.cookie = "poodleToken=" + res + ";path=/" + (remember ? ";max-age=31536000" : "");
 						this.set({success: true});
 						fetch("/api/users/~me")
 							.then(res => res.json())
