@@ -3,7 +3,7 @@
 </svelte:head>
 
 <h1>My Redirects</h1>
-<button on:click="newRedirect()">New</button>
+<a class="button" href="/newRedirect">New</a>
 <table>
 	<tr>
 		<th>Redirect</th>
@@ -32,30 +32,6 @@
 				.then(res => {
 					return {data: res};
 				});
-		},
-		methods: {
-			newRedirect() {
-				const host = prompt("Host?");
-				const destination = prompt("Destination");
-
-				fetchWithError(
-					"/api/users/~me/redirects",
-					{
-						method: "POST",
-						body: JSON.stringify({host, destination}),
-					}
-				)
-					.then(res => res.text())
-					.then(idStr => parseInt(idStr, 10))
-					.then(id => {
-						const { data } = this.get();
-
-						data.push({id, host, destination});
-
-						this.set({data});
-					})
-					.catch(showError);
-			}
 		}
 	}
 </script>
