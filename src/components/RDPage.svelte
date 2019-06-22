@@ -1,9 +1,17 @@
+<script>
+	import { stores } from "@sapper/app";
+	const { session } = stores();
+
+	let USER;
+	session.subscribe(value => USER = value.USER);
+</script>
+
 <div>
 	<header>
 		<a href="/"><h1>RedirectDog</h1></a>
-		{#if $USER}
+		{#if USER}
 			<div>
-				<div>Logged in as {$USER.id}</div>
+				<div>Logged in as {USER.id}</div>
 				<div><a href="/redirects">My Redirects</a></div>
 			</div>
 		{:else}

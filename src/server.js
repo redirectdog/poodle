@@ -4,8 +4,7 @@ import fetch from "node-fetch";
 import http from "http";
 import httpProxy from "http-proxy";
 import isomorphicCookie from "isomorphic-cookie";
-import { Store as SvelteStore } from "svelte/store";
-import * as sapper from "../__sapper__/server.js";
+import * as sapper from "@sapper/server";
 
 const PORT = process.env.PORT || 3000;
 const DALMATIAN_HOST = process.env.DALMATIAN_HOST || "http://localhost:5000";
@@ -13,7 +12,7 @@ const DALMATIAN_HOST = process.env.DALMATIAN_HOST || "http://localhost:5000";
 const clientServer = polka()
 	.use(
 		compression({threshold: 0}),
-		sapper.middleware({store: req => new SvelteStore(req.__rdData)}),
+		sapper.middleware({session: req => req.__rdData}),
 	);
 
 const apiServer = httpProxy.createProxyServer({});
