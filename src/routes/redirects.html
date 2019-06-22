@@ -2,30 +2,34 @@
 	<title>My Redirects</title>
 </svelte:head>
 
-<h1>My Redirects</h1>
-<a class="button" href="/newRedirect">New</a>
-<table>
-	<tr>
-		<th>Redirect</th>
-		<th>Total Visits</th>
-		<th>Visits in the Last Month</th>
-	</tr>
-	{#each data as redirect}
-	<tr>
-		<td>
-			{redirect.host} -&gt; {redirect.destination}
-		</td>
-		<td>{redirect.visits_total}</td>
-		<td>{redirect.visits_month}</td>
-	</tr>
-	{/each}
-</table>
+<RDPage>
+	<a class="button" href="/newRedirect">New</a>
+	<table>
+		<tr>
+			<th>Redirect</th>
+			<th>Total Visits</th>
+			<th>Visits in the Last Month</th>
+		</tr>
+		{#each data as redirect}
+		<tr>
+			<td>
+				{redirect.host} -&gt; {redirect.destination}
+			</td>
+			<td>{redirect.visits_total}</td>
+			<td>{redirect.visits_month}</td>
+		</tr>
+		{/each}
+	</table>
+</RDPage>
 
 <script>
 	import fetchWithError from "../util/fetchWithError";
 	import showError from "../util/showError";
 
 	export default {
+		components: {
+			RDPage: "../components/RDPage.html",
+		},
 		preload() {
 			return this.fetch("/api/users/~me/redirects", {credentials: "include"})
 				.then(res => res.json())
