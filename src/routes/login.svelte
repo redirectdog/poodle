@@ -1,4 +1,5 @@
 <script>
+	import * as sapper from "@sapper/app";
 	import { stores } from "@sapper/app";
 	const { session } = stores();
 
@@ -32,7 +33,10 @@
 				success = true;
 				fetch("/api/users/~me")
 					.then(res => res.json())
-					.then(res => session.update(value => ({...value, USER: res})));
+					.then(res => {
+						session.update(value => ({...value, USER: res}));
+						sapper.goto("redirects");
+					});
 			})
 			.catch(err => {
 				console.error(err);

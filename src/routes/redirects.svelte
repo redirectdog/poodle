@@ -1,10 +1,20 @@
 <script context="module">
 	export function preload({params, query}) {
-		return this.fetch("/api/users/~me/redirects", {credentials: "include"})
-			.then(res => res.json())
-			.then(res => {
-				return {redirects: res};
-			});
+		return fetchWithError("/api/users/~me/redirects", {credentials: "include"}, this.fetch)
+			.then(
+				res => {
+					return res.json()
+					.then(res => {
+						return {redirects: res};
+					});
+				},
+				err => {
+					if(err === "Login is required for '~me' paths") {
+						this.redirect(302, 'login');
+					}
+					return Promise.reject(err);
+				}
+			);
 	}
 </script>
 
