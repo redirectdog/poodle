@@ -64,6 +64,10 @@
 		{#each tiers as tier}
 			<div>
 				<h3>{tier.name}</h3>
+				<p class="priceArea">
+					<span class="price">${(tier.monthly_price / 100).toFixed(2)}</span>
+					/ month
+				</p>
 				<ul>
 					{#if tier.visit_limit === 0}
 						<li>{settings.free_visits} requests per month per host</li>
@@ -106,6 +110,14 @@
 
 	.pricingRow > div > .buttonArea {
 		text-align: center;
+	}
+
+	.priceArea {
+		text-align: center;
+	}
+
+	.priceArea > .price {
+		font-size: 3em;
 	}
 
 	@media (max-width: 40rem) {
