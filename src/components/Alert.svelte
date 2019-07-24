@@ -1,4 +1,8 @@
-<p class="alert">
+<script>
+	export let type;
+</script>
+
+<p class={"alert" + (type ? (" alert-type-" + type) : "")}>
 	<slot />
 </p>
 
@@ -12,5 +16,9 @@
 	padding-left: 1.25rem;
 
 	color: darken($color-secondary, 15%);
+
+	&.alert-type-info {
+		border-left-color: #64b5f6;
+	}
 }
 </style>

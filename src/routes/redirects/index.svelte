@@ -19,10 +19,11 @@
 </script>
 
 <script>
-	import fetchWithError from "../util/fetchWithError";
-	import showError from "../util/showError";
+	import fetchWithError from "../../util/fetchWithError";
+	import showError from "../../util/showError";
 
-	import RDPage from "../components/RDPage.svelte";
+	import LinkRow from "../../components/LinkRow.svelte";
+	import RDPage from "../../components/RDPage.svelte";
 
 	export let redirects;
 </script>
@@ -40,13 +41,13 @@
 			<th>Visits in the Last Month</th>
 		</tr>
 		{#each redirects as redirect}
-		<tr>
-			<td>
-				{redirect.host} -&gt; {redirect.destination}
-			</td>
-			<td>{redirect.visits_total}</td>
-			<td>{redirect.visits_month}</td>
-		</tr>
+			<LinkRow href={"/redirects/" + redirect.id}>
+				<td>
+			  {redirect.host} -&gt; {redirect.destination}
+				</td>
+				<td>{redirect.visits_total}</td>
+				<td>{redirect.visits_month}</td>
+			</LinkRow>
 		{/each}
 	</table>
 </RDPage>
