@@ -35,16 +35,6 @@
 				.then(() => submittingDestination = false);
 		}
 	}
-
-	function enableTLS() {
-		submittingEnableTLS = true;
-		fetchWithError("/api/redirects/" + encodeURIComponent(info.id), {method: "PATCH", body: JSON.stringify({"tls.enabled": true}), headers: {"Content-type": "application/json"}})
-			.then(() => {
-				info.tls.enabled = true;
-			})
-			.catch(showError)
-			.then(() => submittingEnableTLS = false);
-	}
 </script>
 
 <svelte:head>
@@ -69,40 +59,21 @@
 	{#if !info.record_confirmed && settings.redirect_host}
 		<Alert type="info">To finish setup, add a CNAME or ALIAS record pointing to <code>{settings.redirect_host}</code> with your DNS provider.</Alert>
 	{/if}
-	<h3>TLS</h3>
-	{#if info.tls.enabled}
+	{#if info.record_confirmed || info.tls.state === "ready"}
+		<h3>TLS</h3>
 		<p>
-			TLS is enabled.
 			{#if info.tls.state === "pending"}
 				Queued for certificate generation, should be ready soon
 			{:else if info.tls.state === "error"}
 				<Alert>
 					Certificate generation failed.
 				</Alert>
-			{:else if info.tls.state !== "ready"}
+			{:else if info.tls.state === "ready"}
+				TLS is ready.
+			{:else}
 				<Alert>Unknown state: {info.tls.state}</Alert>
 			{/if}
 		</p>
-	{:else}
-		<p>TLS is disabled.</p>
-		{#if info.record_confirmed}
-			<button on:click={enableTLS} disabled={submittingEnableTLS}>
-				{#if submittingEnableTLS}
-					Enabling…
-				{:else}
-					Enable
-				{/if}
-			</button>
-		{:else}
-			<p>DNS records must be set up before TLS can be enabled.</p>
-			<button on:click={enableTLS} disabled={submittingEnableTLS}>
-				{#if submittingEnableTLS}
-					Enabling…
-				{:else}
-					Try Anyway
-				{/if}
-			</button>
-		{/if}
 	{/if}
 </RDPage>
 
