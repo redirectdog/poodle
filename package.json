@@ -22,7 +22,7 @@
 	"dependencies": {
 		"compression": "^1.7.4",
 		"get-js": "0.0.5",
-		"http-proxy": "^1.18.0",
+		"http-proxy": "^1.18.1",
 		"isomorphic-cookie": "^1.2.4",
 		"node-fetch": "^2.6.0",
 		"polka": "^1.0.0-next.11"
